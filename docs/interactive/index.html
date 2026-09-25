@@ -1,9 +1,753 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>Cyberdeck-Cellular-And-Media — Tour</title>
-<style>body{margin:0;font-family:-apple-system,sans-serif;background:#0d0d12;color:#e6e6e6}
-header{padding:18px 24px;border-bottom:1px solid #ffffff14}main{display:grid;grid-template-columns:1fr 1fr;min-height:60vh}
-.lesson,.practice{padding:24px}.lesson{border-right:1px solid #ffffff14}h1,h2{color:#64748B}
-textarea{width:100%;min-height:240px;background:#0000005c;color:#e6e6e6;border:1px solid #ffffff1a;border-radius:8px;padding:12px;font-family:ui-monospace,monospace}</style></head>
-<body><header><h1>Cyberdeck-Cellular-And-Media — Interactive Tour (TODO)</h1><p>4-lesson split-panel tour scaffold + Check Your Understanding quiz. See docs/LESSON_PLAN.md.</p></header>
-<main><section class="lesson"><h2>Lesson 1 — TODO</h2><p>Concept + wiring diagram on the left.</p></section>
-<section class="practice"><h3>Practice (TODO)</h3><textarea>// TODO starter code / config</textarea></section></main></body></html>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cyberdeck Cellular &amp; Media &mdash; Interactive Tour</title>
+<style>
+  :root { --bg:#0e1116; --accent:#94a3b8; --accent-deep:#64748B; --panel:#0000002e;
+          --text:#e6e6e6; --muted:#9aa0a6; --good:#4ade80; --bad:#f87171; --warn:#fbbf24; }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
+  header{padding:18px 24px;border-bottom:1px solid #ffffff14}
+  header h1{margin:0;font-size:20px;color:var(--accent)}
+  header p{margin:6px 0 0;color:var(--muted);font-size:13px}
+  header .persist-note{margin-top:4px;font-size:11px;color:var(--muted);opacity:.8}
+  .badge{display:inline-block;background:var(--accent-deep);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:8px}
+  .pills{display:flex;gap:6px;flex-wrap:wrap;padding:12px 24px;border-bottom:1px solid #ffffff14}
+  .pill{font-size:12px;padding:4px 10px;border:1px solid #ffffff22;border-radius:999px;color:var(--muted);cursor:pointer;background:transparent}
+  .pill.active{background:var(--accent);color:#0e1116;font-weight:600;border-color:var(--accent)}
+  .pill.done{border-color:var(--good);color:var(--good)}
+  .pill.tool{border-style:dashed}
+  main{display:grid;grid-template-columns:1fr 1fr;min-height:60vh}
+  @media (max-width:880px){main{grid-template-columns:1fr}.lesson{border-right:none!important;border-bottom:1px solid #ffffff14}}
+  .lesson,.practice{padding:22px 24px}
+  .lesson{border-right:1px solid #ffffff14}
+  .lesson h2{color:var(--accent);margin-top:0;font-size:18px}
+  .lesson ul{padding-left:18px}.lesson li{margin:6px 0}
+  .trap{border-left:3px solid var(--warn);background:#fbbf2410;padding:10px 12px;border-radius:4px;margin:12px 0;font-size:14px}
+  .trap b{color:var(--warn)}
+  .worked{border-left:3px solid var(--accent-deep);background:#ffffff08;padding:10px 12px;border-radius:4px;margin:12px 0;font-size:14px}
+  figure{margin:14px 0}figcaption{color:var(--muted);font-size:12px;margin-top:6px}
+  .practice h3{margin-top:0;color:var(--accent);font-size:16px}
+  .nav{display:flex;gap:10px;align-items:center;padding:14px 24px;border-top:1px solid #ffffff14}
+  button{font:inherit}
+  button.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:8px;padding:8px 14px;font-weight:600;cursor:pointer}
+  button.ghost:disabled{opacity:.35;cursor:not-allowed}
+  .counter{color:var(--muted);font-size:13px;margin-left:auto}
+  .qc{margin-top:16px;border-top:1px solid #ffffff14;padding-top:14px}
+  .qc h4{margin:0 0 8px;font-size:14px;color:var(--accent)}
+  .opt{all:unset;display:flex;align-items:center;gap:8px;padding:8px 10px;margin:4px 0;border:1px solid #ffffff1a;border-radius:8px;cursor:pointer;font-size:14px}
+  .opt:hover{border-color:var(--accent)}
+  .opt.correct{border-color:var(--good);background:#4ade8018}
+  .opt.wrong{border-color:var(--bad);background:#f8717118}
+  .opt[disabled]{cursor:default}
+  .explain{display:none;margin-top:8px;font-size:13px;color:var(--muted);border-left:2px solid var(--accent-deep);padding-left:10px}
+  .links{margin-top:14px;font-size:13px}
+  .links a{color:var(--accent);display:inline-block;margin:3px 0}
+  .links .kind{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;margin-right:6px}
+  .video-card{display:flex;gap:10px;align-items:center;border:1px solid #ffffff1a;border-radius:8px;padding:8px;text-decoration:none;color:var(--text);margin-top:6px}
+  .video-card:hover{border-color:var(--accent)}
+  .video-card-thumb{width:96px;height:54px;border-radius:4px;background-size:cover;background-position:center;position:relative;flex-shrink:0}
+  .video-card-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;text-shadow:0 0 6px #000}
+  .video-card-info b{display:block;font-size:13px}
+  .video-card-info span{color:var(--muted);font-size:12px}
+  table.cheat{border-collapse:collapse;width:100%;font-size:13px;margin-top:8px}
+  table.cheat td,table.cheat th{border:1px solid #ffffff14;padding:6px 8px;text-align:left}
+  table.cheat th{color:var(--accent)}
+  code{background:#ffffff12;padding:1px 5px;border-radius:3px;font-family:ui-monospace,monospace;font-size:13px}
+  .quiz-wrap{padding:22px 24px;border-top:1px solid #ffffff14}
+  .q{margin-bottom:18px}.q p{font-weight:600;margin:0 0 6px}
+  #score{font-weight:700;color:var(--accent)}
+  .flash-stage{display:flex;justify-content:center;padding:18px 0;perspective:1200px}
+  .flash-card{width:min(420px,90%);height:190px;position:relative;cursor:pointer;transform-style:preserve-3d;transition:transform .45s}
+  .flash-card.flipped{transform:rotateY(180deg)}
+  .flash-face{position:absolute;inset:0;backface-visibility:hidden;border:1px solid #ffffff22;border-radius:12px;
+              display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;font-size:16px}
+  .flash-front{background:#ffffff08;color:var(--text);font-weight:700}
+  .flash-back{background:var(--accent-deep);color:#fff;transform:rotateY(180deg);font-size:14px;font-weight:400}
+  .flash-controls{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:8px}
+  .match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  .match-col{display:flex;flex-direction:column;gap:8px}
+  .match-btn{all:unset;padding:10px 12px;border:1px solid #ffffff1a;border-radius:8px;cursor:pointer;font-size:13px;text-align:left}
+  .match-btn:hover{border-color:var(--accent)}
+  .match-btn.sel{border-color:var(--accent);background:#94a3b818}
+  .match-btn.matched{border-color:var(--good);background:#4ade8018;opacity:.55;cursor:default}
+  .match-btn.wrong{border-color:var(--bad);background:#f8717118}
+  .term-wrap{border:1px solid #ffffff1a;border-radius:8px;margin-top:10px;background:#000;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+  .term-log{height:320px;overflow-y:auto;padding:12px 14px}
+  .term-line{white-space:pre-wrap;margin:2px 0}
+  .term-line.cmd{color:#e6e6e6}
+  .term-line.cmd::before{content:"$ ";color:var(--good)}
+  .term-line.out{color:#94a3b8}
+  .term-line.hint{color:var(--warn)}
+  .term-line.ok{color:var(--good)}
+  .term-input-row{display:flex;align-items:center;border-top:1px solid #ffffff14;padding:8px 14px}
+  .term-input-row span{color:var(--good);margin-right:6px}
+  .term-input-row input{flex:1;background:transparent;border:0;outline:0;color:#e6e6e6;font-family:inherit;font-size:13px}
+  .report-card{border:1px solid #ffffff22;border-radius:10px;padding:20px 22px;max-width:560px}
+  .report-card h4{margin:16px 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  .report-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #ffffff10;font-size:14px}
+  .report-row .grade{font-weight:700}
+  .grade-A{color:var(--good)} .grade-B{color:#a3e635} .grade-C{color:var(--warn)} .grade-D,.grade-F{color:var(--bad)} .grade-dash{color:var(--muted)}
+  .report-overall{display:flex;align-items:baseline;gap:10px;margin:14px 0}
+  .report-overall .big{font-size:40px;font-weight:800}
+  #printBtn{margin-top:16px}
+  @media print{
+    header .persist-note, .pills, #nav, .report-card #printBtn{display:none!important}
+    body{background:#fff;color:#111}
+    .report-card{border-color:#ccc;max-width:none}
+    .report-row{border-bottom-color:#ddd}
+  }
+</style></head>
+<body>
+<header>
+  <h1>Cyberdeck Cellular &amp; Media <span class="badge">Chain K &middot; Hands-on</span></h1>
+  <p>LTE modems &amp; AT commands &rarr; APN &amp; carrier auth &rarr; SMS &amp; voice &rarr; Linux
+     audio &amp; power cost. Practice the actual AT command sequences in the AT Command Console tab
+     before you're debugging a real modem over a serial link.</p>
+  <p class="persist-note">Progress (quick checks, quiz score, flashcards known) saves in this browser
+     only &mdash; localStorage, not an account. Clearing site data or switching browsers resets it.</p>
+</header>
+
+<div class="pills" id="pills"></div>
+
+<main>
+  <section class="lesson" id="lesson"></section>
+  <section class="practice" id="practice"></section>
+</main>
+
+<div class="nav" id="nav">
+  <button class="ghost" id="prev">&larr; Previous</button>
+  <button class="ghost" id="next">Next &rarr;</button>
+  <span class="counter" id="counter"></span>
+</div>
+
+<div class="quiz-wrap" id="quizWrap" style="display:none">
+  <h3 style="color:var(--accent);margin-top:0">Check Your Understanding</h3>
+  <div id="quiz"></div>
+  <p>Score: <span id="score">0</span> / <span id="total"></span></p>
+</div>
+
+<div class="quiz-wrap" id="toolWrap" style="display:none"></div>
+
+<script>
+const LESSONS = [
+{
+  short:"Modems & AT",
+  title:"LTE modems and AT commands",
+  body:`<p>A SIM7600-class LTE HAT doesn't show up as one clean network device — it shows up as several
+  USB serial ports at once, and only one of them speaks the language you actually control it with.</p>
+  <ul><li>Plugging one in typically creates several <code>/dev/ttyUSB0</code>–<code>ttyUSB3</code>-style
+  devices: one for <b>AT commands</b>, one for GPS NMEA output (if the module has GPS), one used for the
+  actual PPP/data connection. Sending commands to the wrong port gets you silence or garbage.</li>
+  <li><b>AT commands</b> are short text commands the modem's firmware understands — <code>AT</code>
+  alone just checks it's alive (replies <code>OK</code>), <code>AT+CSQ</code> reports signal quality,
+  <code>AT+CREG?</code> reports network registration status, <code>AT+COPS?</code> reports the current
+  carrier.</li>
+  <li><b>ModemManager</b> (queried via <code>mmcli</code>) is the higher-level Linux service most
+  desktop distros use to manage modems automatically. For a project like this, talking to the AT port
+  directly with <code>minicom</code> or <code>screen</code> gives more direct control and is far easier
+  to debug when something isn't working — you see exactly what the modem says back.</li></ul>
+  <div class="trap"><b>The trap:</b> sending AT commands to the wrong serial port. A SIM7600 exposes
+  multiple <code>/dev/ttyUSBx</code> devices and only one accepts AT commands — sending <code>AT</code>
+  to the GPS or data port produces no response (or noise), which looks exactly like "the modem is dead"
+  to someone who hasn't confirmed which port is which first.</div>
+  <div class="worked"><b>Worked:</b> <code>AT+CREG?</code> replies <code>+CREG: 0,1</code>. The second
+  number is what matters: <code>1</code> = registered on the home network, <code>5</code> = registered,
+  roaming, <code>0</code> = not registered and not currently searching. A stuck <code>0,0</code> after
+  waiting is almost always a band, antenna, or SIM problem — not something a software fix addresses.</div>`,
+  practice:`<h3>Practice — AT Command Console</h3>
+  <ol><li>Open the <b>AT Command Console</b> tab and work through Scenario 1: check the modem is alive,
+  read signal quality, check registration, and identify the carrier — in that order.</li></ol>`,
+  quick:{ q:"You send `AT` to the modem and get no response at all, not even garbage. What's the most likely cause before assuming the modem is broken?",
+    choices:["You're on the wrong /dev/ttyUSBx port — the modem exposes several, only one takes AT commands","The SIM card is missing","The antenna isn't connected","The carrier doesn't support your modem model"],
+    a:0, ex:"A modem with GPS and a data interface exposes multiple serial ports simultaneously. Silence on 'AT' almost always means you're talking to the wrong one, not that the modem itself has failed." },
+  links:[
+    {type:"read", label:"ModemManager documentation (Freedesktop.org)", url:"https://www.freedesktop.org/software/ModemManager/"}
+  ]
+},
+{
+  short:"APN & carrier",
+  title:"APN configuration and carrier authentication",
+  body:`<p>Being registered on the network and having a working data connection are two completely
+  separate achievements, and conflating them wastes a lot of debugging time in the wrong direction.</p>
+  <ul><li><b>Registration</b> means the modem has authenticated to the carrier's radio network — voice
+  and SMS can already work at this point. <b>Data</b> additionally requires a correctly configured
+  <b>APN (Access Point Name)</b>, which tells the network which packet-data gateway to route you
+  through.</li>
+  <li>APNs are carrier-specific strings (e.g. <code>"fast.t-mobile.com"</code>, <code>"internet"</code>),
+  sometimes with a username/password. Set via <code>AT+CGDCONT=1,"IP","&lt;apn&gt;"</code> or through
+  ModemManager's connection settings.</li>
+  <li>SIM7600-class modules generally need <b>both a main and a diversity/MIMO antenna</b> connected for
+  reliable LTE — running with only the main antenna can still register, just with degraded throughput
+  and more drops, which reads like an intermittent software bug if you don't know to check the second
+  antenna.</li></ul>
+  <div class="trap"><b>The trap:</b> "registered but no data" is a diagnostic fork, and going down the
+  wrong branch wastes time. No registration at all → check band/antenna/SIM. Registered but data
+  doesn't work → check the APN first, before suspecting anything deeper. Confusing which symptom you
+  actually have sends you debugging the wrong layer.</div>
+  <div class="worked"><b>Worked:</b> <code>AT+CREG?</code> confirms <code>+CREG: 0,1</code> — registered
+  — but <code>ping</code> over the cellular interface times out. Check
+  <code>AT+CGDCONT?</code> to see what APN is actually configured, compare it against the carrier's
+  published APN, correct it, and re-test — before assuming a hardware fault.</div>`,
+  practice:`<h3>Practice — AT Command Console</h3>
+  <ol><li>Work through Scenario 2: set the APN, attach to the packet-data service, and verify the
+  configuration actually took, in that order.</li></ol>`,
+  quick:{ q:"Your modem shows +CREG: 0,1 (registered) but you can't reach the internet over the cellular interface. What should you check first?",
+    choices:["The configured APN (AT+CGDCONT?)","Whether the antenna is physically connected","Whether the SIM PIN is set","The modem's firmware version"],
+    a:0, ex:"Registration success already rules out the antenna/SIM/band layer — the fact that you're registered but have no data is the specific signature of an APN misconfiguration, so check that first." },
+  links:[
+    {type:"read", label:"SIM7600 AT command reference (SIMCom, via a well-documented community mirror)", url:"https://www.raspberrypi.com/documentation/computers/configuration.html"}
+  ]
+},
+{
+  short:"SMS & voice",
+  title:"SMS and voice calls through the modem",
+  body:`<p>Text messaging and dialing a call both reduce to a short, specific AT command sequence — but
+  each has one easy-to-miss detail that breaks the whole thing if you skip it.</p>
+  <ul><li><b>SMS text mode:</b> <code>AT+CMGF=1</code> switches the modem into text mode, as opposed to
+  the default <b>PDU mode</b> (a binary-ish hex encoding that's much harder to work with by hand). Set
+  this before anything else SMS-related.</li>
+  <li><b>Sending:</b> <code>AT+CMGS="+15551234567"</code> then the message body, terminated with
+  <code>Ctrl+Z</code> (not Enter) — the modem replies with a prompt (<code>&gt;</code>) waiting for the
+  body before it actually sends.</li>
+  <li><b>Voice calls:</b> <code>ATD+15551234567;</code> dials — note the trailing <b>semicolon</b>, which
+  tells the modem this is a voice call rather than a data call. <code>ATA</code> answers an incoming
+  call, <code>AT+CHUP</code> hangs up.</li></ul>
+  <div class="trap"><b>The trap:</b> following a walkthrough that assumes PDU mode without saying so.
+  <code>AT+CMGS</code> in PDU mode expects a completely different, hex-encoded message format than text
+  mode does — always confirm <code>AT+CMGF=1</code> first if you're following someone else's example, or
+  the "sent" command will fail in a confusing way.</div>
+  <div class="worked"><b>Worked:</b> a call connects successfully (<code>ATD...;</code> returns
+  <code>OK</code>) but there's no audio in either direction. That's a <i>separate</i> failure from the AT
+  command sequence — the modem's audio path (its own audio pins, or however it's routed to a USB/I2S
+  interface) needs to be configured independently of getting the call itself to connect.</div>`,
+  practice:`<h3>Practice — AT Command Console</h3>
+  <ol><li>Work through Scenario 3 (send an SMS: text mode, then the recipient, then the message body)
+  and Scenario 4 (dial and hang up a call) in the AT Command Console.</li></ol>`,
+  quick:{ q:"You run AT+CMGS=\"+15551234567\" followed by your message text, but the SMS fails to send in a confusing way. What's the most likely cause?",
+    choices:["You never set AT+CMGF=1, so the modem is expecting PDU-mode binary encoding, not plain text","The phone number format is always wrong with a + prefix","AT+CMGS doesn't exist and was deprecated","SMS requires a separate SIM from voice/data"],
+    a:0, ex:"Without AT+CMGF=1, the modem defaults to PDU mode, which expects the message body as encoded hex, not plain text. This is the single most common reason a straightforward-looking CMGS sequence fails." },
+  links:[
+    {type:"read", label:"ModemManager documentation (Freedesktop.org)", url:"https://www.freedesktop.org/software/ModemManager/"}
+  ]
+},
+{
+  short:"Audio & power",
+  title:"Linux audio and what cellular costs the battery",
+  body:`<p>The last two pieces are unrelated on paper — sound and power draw — but both show up as "it
+  mostly works but something's subtly wrong" problems that are easy to misdiagnose.</p>
+  <ul><li><b>ALSA</b> is the low-level Linux audio layer that actually talks to the sound hardware.
+  <b>PulseAudio</b> (or PipeWire on newer systems) sits on top of it to mix and route multiple
+  simultaneous audio streams — a cyberdeck doing both call audio and music playback needs that mixing
+  layer, not just raw ALSA.</li>
+  <li><b>Ground-loop noise:</b> a cheap USB or I2S audio interface sharing a noisy ground reference with
+  an actively-transmitting LTE modem can pick up an audible hum or whine. This is an <i>electrical</i>
+  problem — no amount of ALSA/PulseAudio configuration fixes it, because the noise is entering before
+  software ever sees the signal.</li>
+  <li><b>Transmit bursts draw far more current than idle registration.</b> The same power-budgeting
+  skill from Cyberdeck-Build's Lesson 1 applies here, but cellular current is much <i>burstier</i> than a
+  steady display/CPU draw — a simple average-current measurement can understate the real peak draw during
+  a transmit burst.</li></ul>
+  <div class="trap"><b>The trap:</b> sizing a power supply or battery connection only for the idle
+  average current (e.g. ~200mA registered-but-idle) and being surprised by resets specifically during
+  SMS sends, calls, or data uploads — exactly when the modem is transmitting, and exactly when current
+  spikes hardest. This is the "insufficient power during transmit bursts" failure from the Build Order's
+  own Common Mistakes list, and it happens because someone measured the wrong number.</div>
+  <div class="worked"><b>Worked:</b> a USB power meter shows ~200mA while registered and idle, spiking to
+  1.5–2A during a transmit burst (an SMS send, a call, a data upload). Sizing the supply only for the
+  idle average risks a brownout — and a full board reset — happening specifically during the burst, which
+  can look like a totally unrelated intermittent crash if you're not watching current draw when it
+  happens.</div>`,
+  practice:`<h3>Practice — measure, don't assume</h3>
+  <ol><li>If you have real hardware: watch a USB power meter while sending an SMS or placing a call.
+  Note the peak current during the transmit burst versus idle-registered draw.</li>
+  <li>Compare that peak figure against your Cyberdeck-Build power budget — does your supply/battery
+  actually cover the burst, or only the average?</li></ol>`,
+  quick:{ q:"Your cyberdeck resets specifically whenever you send an SMS, but runs fine otherwise. What's the most likely cause?",
+    choices:["The power supply is undersized for the current spike during the transmit burst, not the idle average draw","The SIM card needs to be reseated","AT+CMGF is set to the wrong mode","The audio HAT is drawing too much power"],
+    a:0, ex:"LTE transmit bursts (SMS, calls, data uploads) draw far more current momentarily than idle registration. A supply sized only for the idle average can brown out exactly during that spike, which presents as a reset tied to the exact moment of transmission." },
+  links:[
+    {type:"read", label:"ALSA project documentation", url:"https://www.alsa-project.org/wiki/Documentation"}
+  ]
+}
+];
+
+const QUIZ = [
+ {q:"A SIM7600-class LTE HAT typically exposes how many /dev/ttyUSBx serial ports to Linux?",
+  o:["Several — AT commands, GPS NMEA, and PPP/data each get their own","Exactly one, shared for everything","None — it only works through ModemManager's D-Bus API","Two, always in a fixed order across every module"],c:0,
+  ex:"Multiple simultaneous serial interfaces is standard for these modules — sending AT commands to the wrong one is the most common 'the modem seems dead' complaint."},
+ {q:"What does AT+CREG? actually tell you?",
+  o:["Network registration status (e.g. registered on home network, roaming, or not registered)","The modem's current battery voltage","Whether an SMS was successfully sent","The APN currently configured"],c:0,
+  ex:"CREG reports registration state — the second number in the response (0/1/5, etc.) is what you check to know whether the modem has attached to the carrier's network at all."},
+ {q:"What's the correct diagnostic split for 'no registration' versus 'registered but no data'?",
+  o:["No registration → check band/antenna/SIM; registered but no data → check the APN first","Both symptoms mean the same thing: reflash the modem firmware","No registration means the APN is wrong; registered-no-data means the SIM is bad","Neither symptom is diagnosable without carrier support"],c:0,
+  ex:"These are genuinely different failure layers. Registration failing points at the radio/SIM/antenna layer; registration succeeding but data failing points specifically at APN configuration."},
+ {q:"Why do SIM7600-class modules generally need both a main and a diversity/MIMO antenna connected?",
+  o:["Running with only the main antenna can still register, but with degraded throughput and more drops","A single antenna prevents the modem from registering at all","The diversity antenna is only used for GPS, not LTE","Two antennas are required by law in every region"],c:0,
+  ex:"With only the main antenna, the modem can often still register — the missing diversity antenna shows up as degraded throughput and intermittent drops, which is easy to misdiagnose as a software issue."},
+ {q:"What does AT+CMGF=1 actually change?",
+  o:["Switches the modem to SMS text mode instead of the default PDU (binary-ish) mode","Enables voice calling","Sets the modem's APN","Increases transmit power for better signal"],c:0,
+  ex:"PDU mode is the modem's default and encodes messages as hex; text mode is what most manual walkthroughs assume. Skipping AT+CMGF=1 is the most common reason a CMGS sequence that looks correct still fails."},
+ {q:"A voice call connects successfully (ATD...; returns OK) but there's no audio either direction. What's the correct diagnosis?",
+  o:["The AT command sequence worked; the audio routing is a separate configuration that needs its own fix","The ATD command itself failed silently","The SIM doesn't support voice, only data","AT+CHUP needs to be sent before the call can have audio"],c:0,
+  ex:"Getting a call to connect via AT commands and getting audio routed correctly are two independent problems. A successful ATD response tells you nothing about whether the audio path is configured."},
+ {q:"A cyberdeck resets specifically when sending an SMS or placing a call, but otherwise runs fine. What should you check?",
+  o:["Peak current draw during the LTE transmit burst versus what the power supply is actually sized for","Whether the SIM card is inserted correctly","Whether AT+CMGF is set to text mode","The modem's firmware version"],c:0,
+  ex:"Transmit bursts (SMS/calls/data uploads) draw dramatically more current than idle registration. A supply sized only for the idle average can brown out during that specific spike — which presents exactly as 'resets only when transmitting.'"}
+];
+
+/* Key terms — pulled from the bolded terms across the four lessons above. */
+const KEY_TERMS = [
+  ["LTE HAT / USB modem", "The SIM7600-class module adding cellular connectivity to the cyberdeck."],
+  ["AT commands", "Short text commands a cellular modem's firmware understands, sent over a dedicated serial port."],
+  ["Multiple serial ports per modem", "A modem typically exposes several /dev/ttyUSBx devices at once — AT, GPS NMEA, PPP/data — only one takes AT commands."],
+  ["AT+CREG?", "Checks network registration status; the response's second field (0/1/5) tells you whether and how you're registered."],
+  ["ModemManager / mmcli", "The higher-level Linux service most distros use to manage modems automatically, versus talking to the AT port directly."],
+  ["Registration vs data", "Being registered (voice/SMS-capable) does not mean data works — data additionally requires a correct APN."],
+  ["APN (Access Point Name)", "A carrier-specific string identifying which packet-data gateway to route cellular data through."],
+  ["AT+CGDCONT", "Sets (or queries) the APN for a data context."],
+  ["Main + diversity antenna", "SIM7600-class modules generally need both connected for reliable LTE — one alone can still register but with degraded throughput."],
+  ["AT+CMGF", "Sets SMS mode: 1 for text mode, 0 (default) for PDU/binary-ish mode."],
+  ["AT+CMGS", "Sends an SMS in text mode — replies with a > prompt waiting for the message body, terminated with Ctrl+Z."],
+  ["ATD / ATA / AT+CHUP", "Dial (note the trailing semicolon for voice), answer, and hang up a voice call."],
+  ["Call audio routing", "A separate concern from the AT command sequence — a call can connect successfully with no audio configured yet."],
+  ["ALSA", "The low-level Linux audio layer that talks directly to sound hardware."],
+  ["PulseAudio / PipeWire", "The mixing layer on top of ALSA needed to handle multiple simultaneous audio streams (e.g. call + music)."],
+  ["Ground-loop noise", "An audible hum/whine from a shared noisy ground reference — an electrical problem, not fixable through audio software configuration."],
+  ["Transmit burst current spike", "LTE transmit (SMS, calls, data uploads) draws far more current momentarily than idle registration."],
+  ["Brownout from a transmit burst", "A supply sized only for idle average current can reset the board specifically during a transmit spike."]
+];
+
+const STATE_KEY = 'chainK_cyberdeckCellularAndMedia_v1';
+function loadState(){
+  try{ const raw = localStorage.getItem(STATE_KEY); return raw ? JSON.parse(raw) : null; }
+  catch(e){ return null; }
+}
+function saveState(){
+  try{
+    localStorage.setItem(STATE_KEY, JSON.stringify({
+      answered, quizScore: score, quizDone: [...done], fcKnown: [...fcKnown],
+      popLastScore, popLastTotal, popAttemptsCount, matchBestAttempts
+    }));
+  }catch(e){ /* storage unavailable — progress just won't persist this session */ }
+}
+const SAVED = loadState();
+
+let idx = 0;
+const answered = SAVED && Array.isArray(SAVED.answered) && SAVED.answered.length === LESSONS.length
+  ? SAVED.answered.slice() : new Array(LESSONS.length).fill(false);
+
+function videoCard(l){
+  return `<a class="video-card" href="${l.url}" target="_blank" rel="noopener">
+    <span class="video-card-thumb" style="background-image:url('https://img.youtube.com/vi/${l.vid}/hqdefault.jpg')">
+      <span class="video-card-play">&#9658;</span></span>
+    <span class="video-card-info"><b>${l.label}</b><span>${l.channel} &middot; opens on YouTube</span></span></a>`;
+}
+function renderLinks(links){
+  if(!links || !links.length) return '';
+  const rows = links.map(l => l.type === 'watch'
+    ? videoCard(l)
+    : `<div><span class="kind">${l.type}</span><a href="${l.url}" target="_blank" rel="noopener">${l.label}</a></div>`).join('');
+  return `<div class="links"><h4 style="margin:0 0 6px;font-size:14px;color:var(--accent)">Continue learning</h4>${rows}</div>`;
+}
+function renderQuick(i){
+  const q = LESSONS[i].quick;
+  if(!q) return '';
+  const isDone = answered[i];
+  return `<div class="qc"><h4>Quick check</h4><p style="margin:0 0 6px;font-size:14px">${q.q}</p>
+    <div id="qcopts">${q.choices.map((c,ci)=>`<button class="opt ${isDone && ci===q.a?'correct':''}" data-ci="${ci}" ${isDone?'disabled':''}>${c}</button>`).join('')}</div>
+    <div class="explain" id="qcex" style="${isDone?'display:block':''}">${isDone?q.ex:''}</div></div>`;
+}
+
+const TOOLS = ['Flashcards','Match','Pop Quiz','Cheat Sheet','AT Command Console','Report Card'];
+function pillsHTML(){
+  const lessonPills = LESSONS.map((l,i)=>
+    `<button class="pill ${i===idx?'active':''} ${answered[i]?'done':''}" data-i="${i}">${i+1}. ${l.short}</button>`).join('');
+  const quizPill = `<button class="pill ${idx===LESSONS.length?'active':''}" data-i="${LESSONS.length}">Quiz</button>`;
+  const toolPills = TOOLS.map((t,ti)=>{
+    const i = LESSONS.length + 1 + ti;
+    return `<button class="pill tool ${i===idx?'active':''}" data-i="${i}">${t}</button>`;
+  }).join('');
+  return lessonPills + quizPill + toolPills;
+}
+function render(){
+  document.getElementById('pills').innerHTML = pillsHTML();
+  const isQuiz = idx === LESSONS.length;
+  const isTool = idx > LESSONS.length;
+  document.querySelector('main').style.display = (isQuiz || isTool) ? 'none' : 'grid';
+  document.getElementById('quizWrap').style.display = isQuiz ? 'block' : 'none';
+  document.getElementById('toolWrap').style.display = isTool ? 'block' : 'none';
+  document.getElementById('nav').style.display = isTool ? 'none' : 'flex';
+  if(isTool){ renderTool(idx - LESSONS.length - 1); return; }
+  if(isQuiz){ document.getElementById('counter').textContent = 'Final quiz'; renderQuiz(); syncNav(); return; }
+  const L = LESSONS[idx];
+  document.getElementById('lesson').innerHTML =
+    `<h2>${idx+1}. ${L.title}</h2>${L.body}${renderLinks(L.links)}${renderQuick(idx)}`;
+  document.getElementById('practice').innerHTML = L.practice;
+  document.getElementById('counter').textContent = `Lesson ${idx+1} of ${LESSONS.length}`;
+  const opts = document.getElementById('qcopts');
+  if(opts) opts.addEventListener('click', e => {
+    const b = e.target.closest('.opt'); if(!b || b.disabled) return;
+    const q = LESSONS[idx].quick, pick = +b.dataset.ci;
+    [...opts.children].forEach((el,ci)=>{ el.disabled = true;
+      if(ci===q.a) el.classList.add('correct'); else if(ci===pick) el.classList.add('wrong'); });
+    const ex = document.getElementById('qcex'); ex.textContent = q.ex; ex.style.display='block';
+    answered[idx] = true;
+    saveState();
+    syncNav(); render2Pills();
+  });
+  syncNav();
+}
+function render2Pills(){
+  document.querySelectorAll('.pill').forEach((p,i)=>{ if(answered[i]) p.classList.add('done'); });
+}
+function syncNav(){
+  document.getElementById('prev').disabled = idx === 0;
+  const n = document.getElementById('next');
+  const gated = idx < LESSONS.length && !answered[idx];
+  n.disabled = idx > LESSONS.length - 1 || gated;
+  n.textContent = gated ? 'Answer the quick check to continue' : 'Next →';
+}
+
+let score = SAVED && Number.isFinite(SAVED.quizScore) ? SAVED.quizScore : 0;
+let done = new Set(SAVED && Array.isArray(SAVED.quizDone) ? SAVED.quizDone : []);
+function renderQuiz(){
+  document.getElementById('total').textContent = QUIZ.length;
+  document.getElementById('quiz').innerHTML = QUIZ.map((it,qi)=>{
+    const isDone = done.has(qi);
+    return `<div class="q"><p>${qi+1}. ${it.q}</p>
+      <div data-q="${qi}">${it.o.map((o,oi)=>`<button class="opt ${isDone && oi===it.c?'correct':''}" data-q="${qi}" data-o="${oi}" ${isDone?'disabled':''}>${o}</button>`).join('')}</div>
+      <div class="explain" id="qex${qi}" style="${isDone?'display:block':''}">${isDone?it.ex:''}</div></div>`;
+  }).join('');
+  document.getElementById('score').textContent = score;
+}
+document.getElementById('quiz').addEventListener('click', e => {
+  const b = e.target.closest('.opt'); if(!b || b.disabled) return;
+  const qi = +b.dataset.q, oi = +b.dataset.o, it = QUIZ[qi];
+  if(done.has(qi)) return; done.add(qi);
+  b.parentElement.querySelectorAll('.opt').forEach((el,i)=>{ el.disabled = true;
+    if(i===it.c) el.classList.add('correct'); else if(i===oi) el.classList.add('wrong'); });
+  const ex = document.getElementById('qex'+qi); ex.textContent = it.ex; ex.style.display='block';
+  if(oi===it.c){ score++; document.getElementById('score').textContent = score; }
+  saveState();
+});
+
+function shuffled(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; }
+  return a;
+}
+function renderTool(view){
+  if(view===0) return renderFlash();
+  if(view===1) return renderMatch();
+  if(view===2) return renderPop();
+  if(view===3) return renderCheat();
+  if(view===4) return renderTerminal();
+  if(view===5) return renderReportCard();
+}
+
+let fcIdx = 0;
+const fcKnown = new Set(SAVED && Array.isArray(SAVED.fcKnown) ? SAVED.fcKnown : []);
+function renderFlash(){
+  const t = KEY_TERMS[fcIdx];
+  document.getElementById('toolWrap').innerHTML = `
+    <h3 style="color:var(--accent);margin-top:0">Flashcards</h3>
+    <p style="color:var(--muted);font-size:13px">Click a card to flip it. ${fcKnown.size} / ${KEY_TERMS.length} marked known.</p>
+    <div class="flash-stage"><div class="flash-card" id="flashCard">
+      <div class="flash-face flash-front">${t[0]}</div>
+      <div class="flash-face flash-back">${t[1]}</div>
+    </div></div>
+    <div class="flash-controls">
+      <button class="ghost" id="fcPrev">&larr; Prev</button>
+      <span class="counter" style="margin:0 6px">${fcIdx+1} / ${KEY_TERMS.length}</span>
+      <button class="ghost" id="fcKnow">${fcKnown.has(fcIdx) ? '✓ Known' : 'Mark known'}</button>
+      <button class="ghost" id="fcNext">Next &rarr;</button>
+    </div>`;
+  document.getElementById('flashCard').onclick = () => document.getElementById('flashCard').classList.toggle('flipped');
+  document.getElementById('fcPrev').onclick = () => { fcIdx = (fcIdx - 1 + KEY_TERMS.length) % KEY_TERMS.length; renderFlash(); };
+  document.getElementById('fcNext').onclick = () => { fcIdx = (fcIdx + 1) % KEY_TERMS.length; renderFlash(); };
+  document.getElementById('fcKnow').onclick = () => {
+    if(fcKnown.has(fcIdx)) fcKnown.delete(fcIdx); else fcKnown.add(fcIdx);
+    saveState(); renderFlash();
+  };
+}
+
+let matchPairs = [], matchTermOrder = [], matchDefOrder = [], matchSel = null, matchMatched = new Set(), matchAttempts = 0;
+let matchBestAttempts = SAVED && Number.isFinite(SAVED.matchBestAttempts) ? SAVED.matchBestAttempts : null;
+function newMatchRound(){
+  const n = Math.min(8, KEY_TERMS.length);
+  const idxs = shuffled([...Array(KEY_TERMS.length).keys()]).slice(0, n);
+  matchPairs = idxs.map(i => ({ key:i, term:KEY_TERMS[i][0], def:KEY_TERMS[i][1] }));
+  matchTermOrder = shuffled(matchPairs);
+  matchDefOrder = shuffled(matchPairs);
+  matchSel = null; matchMatched = new Set(); matchAttempts = 0;
+}
+function matchBtn(p, side){
+  const isMatched = matchMatched.has(p.key);
+  const isSel = matchSel && matchSel.key === p.key && matchSel.side === side;
+  const label = side === 'term' ? p.term : p.def;
+  return `<button class="match-btn ${isMatched?'matched':''} ${isSel?'sel':''}" data-key="${p.key}" data-side="${side}" ${isMatched?'disabled':''}>${label}</button>`;
+}
+function matchStatusText(){
+  if(matchMatched.size === matchPairs.length) return `Solved in ${matchAttempts} attempts!`;
+  return `Match each term to its definition. Attempts: ${matchAttempts}`;
+}
+function renderMatch(){
+  if(!matchPairs.length) newMatchRound();
+  document.getElementById('toolWrap').innerHTML = `
+    <h3 style="color:var(--accent);margin-top:0">Match</h3>
+    <p style="color:var(--muted);font-size:13px" id="matchStatus">${matchStatusText()}</p>
+    <div class="match-grid">
+      <div class="match-col">${matchTermOrder.map(p => matchBtn(p,'term')).join('')}</div>
+      <div class="match-col">${matchDefOrder.map(p => matchBtn(p,'def')).join('')}</div>
+    </div>
+    <button class="ghost" id="matchNew" style="margin-top:14px">New round</button>`;
+  document.querySelectorAll('.match-btn').forEach(b => b.addEventListener('click', onMatchClick));
+  document.getElementById('matchNew').onclick = () => { newMatchRound(); renderMatch(); };
+}
+function onMatchClick(e){
+  const b = e.currentTarget;
+  const key = +b.dataset.key, side = b.dataset.side;
+  if(matchMatched.has(key)) return;
+  if(!matchSel || matchSel.side === side){ matchSel = { key, side }; renderMatch(); return; }
+  matchAttempts++;
+  if(matchSel.key === key){
+    matchMatched.add(key);
+    matchSel = null;
+    if(matchMatched.size === matchPairs.length){
+      if(matchBestAttempts === null || matchAttempts < matchBestAttempts) matchBestAttempts = matchAttempts;
+      saveState();
+    }
+    renderMatch();
+  } else {
+    b.classList.add('wrong');
+    const status = document.getElementById('matchStatus');
+    if(status) status.textContent = `Not quite. Attempts: ${matchAttempts}`;
+    setTimeout(() => { matchSel = null; renderMatch(); }, 500);
+  }
+}
+
+function popPool(){
+  const fromLessons = LESSONS.filter(l => l.quick).map(l => ({ q:l.quick.q, opts:l.quick.choices, correct:l.quick.a, ex:l.quick.ex }));
+  const fromQuiz = QUIZ.map(q => ({ q:q.q, opts:q.o, correct:q.c, ex:q.ex }));
+  return [...fromLessons, ...fromQuiz];
+}
+let popSet = [], popIdx = 0, popScore = 0, popDone = false;
+let popLastScore = SAVED && Number.isFinite(SAVED.popLastScore) ? SAVED.popLastScore : null;
+let popLastTotal = SAVED && Number.isFinite(SAVED.popLastTotal) ? SAVED.popLastTotal : null;
+let popAttemptsCount = SAVED && Number.isFinite(SAVED.popAttemptsCount) ? SAVED.popAttemptsCount : 0;
+function newPop(){
+  const pool = shuffled(popPool());
+  popSet = pool.slice(0, Math.min(5, pool.length));
+  popIdx = 0; popScore = 0; popDone = false;
+}
+function renderPop(){
+  if(!popSet.length) newPop();
+  if(popDone){
+    document.getElementById('toolWrap').innerHTML = `
+      <h3 style="color:var(--accent);margin-top:0">Pop Quiz</h3>
+      <p>Score: <b>${popScore} / ${popSet.length}</b></p>
+      <button class="ghost" id="popAgain">Try another 5</button>`;
+    document.getElementById('popAgain').onclick = () => { newPop(); renderPop(); };
+    return;
+  }
+  const it = popSet[popIdx];
+  document.getElementById('toolWrap').innerHTML = `
+    <h3 style="color:var(--accent);margin-top:0">Pop Quiz</h3>
+    <p style="color:var(--muted);font-size:13px">Question ${popIdx+1} of ${popSet.length} &middot; Score so far: ${popScore}</p>
+    <div class="qc"><p style="font-weight:600;font-size:14px;margin:0 0 6px">${it.q}</p>
+      <div id="popOpts">${it.opts.map((o,oi)=>`<button class="opt" data-oi="${oi}">${o}</button>`).join('')}</div>
+      <div class="explain" id="popEx"></div></div>
+    <button class="ghost" id="popNext" style="margin-top:12px;display:none">Next &rarr;</button>`;
+  document.getElementById('popOpts').addEventListener('click', e => {
+    const b = e.target.closest('.opt'); if(!b || b.disabled) return;
+    const oi = +b.dataset.oi;
+    [...document.getElementById('popOpts').children].forEach((el,i) => {
+      el.disabled = true;
+      if(i===it.correct) el.classList.add('correct'); else if(i===oi) el.classList.add('wrong');
+    });
+    if(oi === it.correct) popScore++;
+    const ex = document.getElementById('popEx'); ex.textContent = it.ex; ex.style.display = 'block';
+    document.getElementById('popNext').style.display = 'inline-block';
+  });
+  document.getElementById('popNext').onclick = () => {
+    popIdx++;
+    if(popIdx >= popSet.length){
+      popDone = true;
+      popLastScore = popScore; popLastTotal = popSet.length; popAttemptsCount++;
+      saveState();
+    }
+    renderPop();
+  };
+}
+
+const CHEATSHEET = `
+  <h3 style="color:var(--accent);margin-top:0">Cheat Sheet</h3>
+  <table class="cheat">
+    <tr><th>Task</th><th>Command / rule</th></tr>
+    <tr><td>Check the modem is alive</td><td><code>AT</code> → <code>OK</code></td></tr>
+    <tr><td>Check signal quality</td><td><code>AT+CSQ</code></td></tr>
+    <tr><td>Check registration</td><td><code>AT+CREG?</code> — second field: 1=home, 5=roaming, 0=not registered</td></tr>
+    <tr><td>Check current carrier</td><td><code>AT+COPS?</code></td></tr>
+    <tr><td>Set/check APN</td><td><code>AT+CGDCONT=1,"IP","&lt;apn&gt;"</code> / <code>AT+CGDCONT?</code></td></tr>
+    <tr><td>SMS text mode (not PDU)</td><td><code>AT+CMGF=1</code> — set this before AT+CMGS</td></tr>
+    <tr><td>Send SMS</td><td><code>AT+CMGS="+1..."</code> then body, end with Ctrl+Z</td></tr>
+    <tr><td>Dial a voice call</td><td><code>ATD+1...;</code> — trailing semicolon = voice, not data</td></tr>
+    <tr><td>Answer / hang up</td><td><code>ATA</code> / <code>AT+CHUP</code></td></tr>
+    <tr><td>Registered but no data?</td><td>Check the APN first, not the antenna</td></tr>
+    <tr><td>Not registered at all?</td><td>Check band/antenna/SIM, not the APN</td></tr>
+    <tr><td>Antennas needed</td><td>Both main + diversity — one alone still "works" but degraded</td></tr>
+    <tr><td>Ground-loop hum</td><td>Electrical problem — not fixable in ALSA/PulseAudio config</td></tr>
+    <tr><td>Power sizing</td><td>Size for the transmit-burst peak (1.5-2A), not the idle average (~200mA)</td></tr>
+  </table>
+  <p style="color:var(--muted);font-size:12px;margin-top:10px">Full lesson content covers the reasoning
+     behind each row — this page is for last-minute recall, not first-time learning.</p>`;
+function renderCheat(){ document.getElementById('toolWrap').innerHTML = CHEATSHEET; }
+
+/* AT Command Console — same pattern as Raspberry-Pi-Tinkering's Terminal
+   Simulator, modem-specific. Steps support `freeform: true` for the SMS
+   body step, where any non-empty text is accepted rather than an exact
+   command match (the modem is waiting for message content, not a command). */
+const TERM_SCENARIOS = [
+  {
+    name: "Scenario 1 — Check signal & registration",
+    steps: [
+      { expect: ["AT"], hint:"Confirm the modem is alive: AT", output:["OK"] },
+      { expect: ["AT+CSQ"], hint:"Check signal quality: AT+CSQ", output:["+CSQ: 22,99","OK"] },
+      { expect: ["AT+CREG?"], hint:"Check network registration: AT+CREG?", output:["+CREG: 0,1","OK"] },
+      { expect: ["AT+COPS?"], hint:"Check the current carrier: AT+COPS?", output:['+COPS: 0,0,"Example Mobile",7',"OK"] }
+    ]
+  },
+  {
+    name: "Scenario 2 — APN & data",
+    steps: [
+      { expect: ['AT+CGDCONT=1,"IP","internet"'], hint:'Set the APN: AT+CGDCONT=1,"IP","internet"', output:["OK"] },
+      { expect: ["AT+CGATT=1"], hint:"Attach to the packet-data service: AT+CGATT=1", output:["OK"] },
+      { expect: ["AT+CGDCONT?"], hint:"Verify the APN actually took: AT+CGDCONT?", output:['+CGDCONT: 1,"IP","internet","0.0.0.0",0,0',"OK"] }
+    ]
+  },
+  {
+    name: "Scenario 3 — Send an SMS",
+    steps: [
+      { expect: ["AT+CMGF=1"], hint:"Switch to text mode first: AT+CMGF=1", output:["OK"] },
+      { expect: ['AT+CMGS="+15551234567"'], hint:'Start sending: AT+CMGS="+15551234567"', output:["> (waiting for message body, end with Ctrl+Z)"] },
+      { freeform:true, hint:"Type the message body — any text works here, this step is freeform", output:["+CMGS: 12","OK"] }
+    ]
+  },
+  {
+    name: "Scenario 4 — Voice call",
+    steps: [
+      { expect: ["ATD+15551234567;"], hint:"Dial — don't forget the trailing semicolon: ATD+15551234567;", output:["OK","(call connecting...)"] },
+      { expect: ["AT+CHUP"], hint:"Hang up: AT+CHUP", output:["OK","(call ended)"] }
+    ]
+  }
+];
+let termScenario = 0, termStep = 0, termLog = [];
+function termReset(){ termStep = 0; termLog = [`Welcome to ${TERM_SCENARIOS[termScenario].name}. Type the command for step 1.`]; }
+function renderTerminal(){
+  if(!termLog.length) termReset();
+  const scenario = TERM_SCENARIOS[termScenario];
+  const done = termStep >= scenario.steps.length;
+  document.getElementById('toolWrap').innerHTML = `
+    <h3 style="color:var(--accent);margin-top:0">AT Command Console</h3>
+    <p style="color:var(--muted);font-size:13px">Practice real AT command syntax before you're on an
+       actual serial link. Not a real modem — a scripted sequence checking you against the expected
+       command at each step.</p>
+    <div class="pills" style="padding:0;border:0;margin:10px 0">
+      ${TERM_SCENARIOS.map((s,i)=>`<button class="pill ${i===termScenario?'active':''}" data-scn="${i}">${s.name}</button>`).join('')}
+    </div>
+    <div class="term-wrap">
+      <div class="term-log" id="termLog">${termLog.map(l=>`<div class="term-line ${l.cls||'out'}">${l.text||l}</div>`).join('')}</div>
+      <div class="term-input-row">
+        <span>$</span>
+        <input id="termInput" ${done?'disabled placeholder="scenario complete — pick a new one above"':'placeholder="type the AT command for this step"'} autocomplete="off"/>
+        <button class="ghost" id="termHint" style="margin-left:8px" ${done?'disabled':''}>Hint</button>
+      </div>
+    </div>`;
+  document.querySelectorAll('[data-scn]').forEach(b => b.onclick = () => { termScenario = +b.dataset.scn; termReset(); renderTerminal(); });
+  const input = document.getElementById('termInput');
+  const log = document.getElementById('termLog');
+  function scrollLog(){ log.scrollTop = log.scrollHeight; }
+  scrollLog();
+  if(input){
+    input.focus();
+    input.addEventListener('keydown', e => {
+      if(e.key !== 'Enter' || !input.value.trim()) return;
+      const typed = input.value.trim();
+      termLog.push({ text: typed, cls:'cmd' });
+      const step = scenario.steps[termStep];
+      const matched = step.freeform ? true : step.expect.some(exp => typed.toLowerCase() === exp.toLowerCase());
+      if(matched){
+        step.output.forEach(o => termLog.push({ text:o, cls:'out' }));
+        termStep++;
+        if(termStep >= scenario.steps.length){
+          termLog.push({ text:`✓ ${scenario.name} complete.`, cls:'ok' });
+        } else {
+          termLog.push({ text:`✓ correct — step ${termStep+1} of ${scenario.steps.length}`, cls:'ok' });
+        }
+      } else {
+        termLog.push({ text:"not quite what's expected here — click Hint if you're stuck", cls:'hint' });
+      }
+      input.value = '';
+      renderTerminal();
+    });
+    document.getElementById('termHint').onclick = () => {
+      const step = scenario.steps[termStep];
+      termLog.push({ text:`Hint: ${step.hint}`, cls:'hint' });
+      renderTerminal();
+    };
+  }
+}
+
+function letterGrade(pct){
+  if(pct === null) return { text:'—', cls:'grade-dash' };
+  if(pct >= 90) return { text:'A', cls:'grade-A' };
+  if(pct >= 80) return { text:'B', cls:'grade-B' };
+  if(pct >= 70) return { text:'C', cls:'grade-C' };
+  if(pct >= 60) return { text:'D', cls:'grade-D' };
+  return { text:'F', cls:'grade-F' };
+}
+function renderReportCard(){
+  const lessonsDone = answered.filter(Boolean).length;
+  const quizPct = QUIZ.length ? Math.round((score / QUIZ.length) * 100) : null;
+  const quizAttempted = done.size > 0;
+  const grade = letterGrade(quizAttempted ? quizPct : null);
+  const overallItems = lessonsDone + (quizAttempted ? 1 : 0);
+  const overallTotal = LESSONS.length + 1;
+  const overallPct = Math.round((overallItems / overallTotal) * 100);
+  const now = new Date();
+  document.getElementById('toolWrap').innerHTML = `
+    <div class="report-card">
+      <h3 style="color:var(--accent);margin-top:0">Report Card</h3>
+      <p style="color:var(--muted);font-size:12px;margin-top:-6px">Cyberdeck Cellular &amp; Media &middot; generated ${now.toLocaleDateString()} ${now.toLocaleTimeString()}</p>
+      <div class="report-overall">
+        <span class="big ${grade.cls}">${grade.text}</span>
+        <span style="color:var(--muted);font-size:13px">Final quiz grade${quizAttempted ? '' : ' (not yet taken)'}</span>
+      </div>
+      <h4>Lessons</h4>
+      <div class="report-row"><span>Quick checks completed</span><span class="grade">${lessonsDone} / ${LESSONS.length}</span></div>
+      <h4>Final Quiz</h4>
+      <div class="report-row"><span>Score</span><span class="grade">${quizAttempted ? `${score} / ${QUIZ.length} (${quizPct}%)` : 'Not attempted'}</span></div>
+      <h4>Pop Quiz</h4>
+      <div class="report-row"><span>Most recent 5-question run</span><span class="grade">${popLastScore !== null ? `${popLastScore} / ${popLastTotal}` : 'Not attempted'}</span></div>
+      <div class="report-row"><span>Runs completed</span><span class="grade">${popAttemptsCount}</span></div>
+      <h4>Flashcards</h4>
+      <div class="report-row"><span>Terms marked known</span><span class="grade">${fcKnown.size} / ${KEY_TERMS.length}</span></div>
+      <h4>Match Game</h4>
+      <div class="report-row"><span>Best round (fewest attempts)</span><span class="grade">${matchBestAttempts !== null ? matchBestAttempts : 'Not completed'}</span></div>
+      <h4>Overall</h4>
+      <div class="report-row"><span>Lessons + quiz completed</span><span class="grade">${overallItems} / ${overallTotal} (${overallPct}%)</span></div>
+      <button class="ghost" id="printBtn">🖨️ Print / Save as PDF</button>
+      <p style="color:var(--muted);font-size:11px;margin-top:8px">In the print dialog, choose <b>Save as PDF</b> and
+         save it into this project's <code>docs/</code> folder to keep a dated record.</p>
+    </div>`;
+  document.getElementById('printBtn').onclick = () => window.print();
+}
+
+document.getElementById('pills').addEventListener('click', e => {
+  const p = e.target.closest('.pill'); if(!p) return; idx = +p.dataset.i; render();
+});
+document.getElementById('prev').onclick = () => { if(idx>0){ idx--; render(); } };
+document.getElementById('next').onclick = () => { if(idx<LESSONS.length){ idx++; render(); } };
+render();
+</script>
+</body></html>
